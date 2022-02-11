@@ -32,7 +32,12 @@ RUN mkdir /waifu2x/build \
 # ----------------------------------------------------------------------------
 FROM base as production
 
-COPY --from=builder /waifu2x/build/waifu2x-ncnn-vulkan /usr/local/bin/
+WORKDIR /tmp
+
+COPY --from=builder /waifu2x/models /usr/local/bin
+COPY --from=builder /waifu2x/build/waifu2x-ncnn-vulkan /usr/local/bin/waifu2x-ncnn-vulkan
+
 RUN ln -sf /usr/local/bin/waifu2x-ncnn-vulkan /usr/local/bin/waifu2x
 
-CMD [ "/usr/local/bin/waifu2x-ncnn-vulkan" ]
+ENTRYPOINT [ "/usr/local/bin/waifu2x-ncnn-vulkan" ]
+CMD [ "-h" ]
